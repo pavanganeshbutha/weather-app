@@ -30,6 +30,7 @@ async function fetchWeather(city) {
       throw new Error("City not found");
     }
     const data = await response.json();
+    localStorage.setItem("lastSearchedCity", city);
     renderCurrentWeather(data);
   } catch (error) {
     console.error("Error fetching weather data:", error);
@@ -43,4 +44,14 @@ form.addEventListener("submit", function (event) {
     return;
   }
   fetchWeather(city);
+  cityInput.value = "";
 });
+
+function initApp() {
+  const lastSearchedCity = localStorage.getItem("lastSearchedCity");
+  if (lastSearchedCity) {
+    fetchWeather(lastSearchedCity);
+  }
+}
+
+initApp();
