@@ -2,6 +2,10 @@ const form = document.querySelector("form");
 const cityInput = document.querySelector("#city-input");
 const currentWeather = document.querySelector("#current-weather");
 const weatherForecastSection = document.querySelector("#weather-forecast");
+const yearElement = document.querySelector("#year");
+
+// Set dynamic copyright year
+yearElement.textContent = new Date().getFullYear();
 
 function getLifestyleAdvice(temp, weatherId) {
   if (weatherId >= 200 && weatherId < 599) {
