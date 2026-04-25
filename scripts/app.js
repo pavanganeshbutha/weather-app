@@ -31,7 +31,8 @@ function renderCurrentWeather(data) {
   h2.textContent = name;
 
   const p = document.createElement("p");
-  p.textContent = `${temp}`;
+  p.classList.add("temperature");
+  p.textContent = `${Math.round(temp)}℃`;
 
   const img = document.createElement("img");
   img.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
@@ -64,7 +65,7 @@ function renderForecast(forecastList) {
     const { icon, description } = forecast.weather[0];
 
     const p = document.createElement("p");
-    p.textContent = `${temp}`;
+    p.textContent = `${Math.round(temp)}℃`;
 
     const img = document.createElement("img");
     img.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
