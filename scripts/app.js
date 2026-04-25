@@ -3,12 +3,29 @@ const cityInput = document.querySelector("#city-input");
 const currentWeather = document.querySelector("#current-weather");
 const weatherForecastSection = document.querySelector("#weather-forecast");
 
+function getLifestyleAdvice(temp, weatherId) {
+  if (weatherId >= 200 && weatherId < 599) {
+    return "Don't forget your umbrella! ☔";
+  }
+  if (weatherId === 800 && temp <= 30) {
+    return "Perfect clear weather for a walk! 🚶‍♂️";
+  }
+  if (temp < 10) {
+    return "It's freezing outside. Bundle up! 🧥";
+  }
+  if (weatherId === 800 && temp > 30) {
+    return "High UV index and extreme heat. Wear sunscreen and stay hydrated. 🧴☀️";
+  }
+
+  return "A normal day. Dress comfortably.";
+}
+
 function renderCurrentWeather(data) {
   currentWeather.replaceChildren();
 
   const { name } = data;
   const { temp } = data.main;
-  const { description, icon } = data.weather[0];
+  const { id, description, icon } = data.weather[0];
 
   const h2 = document.createElement("h2");
   h2.textContent = name;
@@ -21,6 +38,12 @@ function renderCurrentWeather(data) {
   img.alt = description;
 
   currentWeather.append(h2, p, img);
+
+  const advice = getLifestyleAdvice(temp, id);
+  const adviceP = document.createElement("p");
+  adviceP.classList.add("lifestyle-advice");
+  adviceP.textContent = advice;
+  currentWeather.appendChild(adviceP);
 }
 
 function filterForecastData(forecastList) {
