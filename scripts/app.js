@@ -85,6 +85,25 @@ async function fetchWeather(location) {
   }
 }
 
+function debounce(targetFunction, delay) {
+  let timerId;
+  return function (...args) {
+    clearTimeout(timerId);
+    timerId = setTimeout(function () {
+      targetFunction(...args);
+    }, delay);
+  };
+}
+
+function handleInputSearch(event) {
+  const query = event.target.value.trim();
+  console.log(query);
+}
+
+const debouncedSearch = debounce(handleInputSearch, 500);
+
+cityInput.addEventListener("input", debouncedSearch);
+
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   const city = cityInput.value.trim();
