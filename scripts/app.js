@@ -63,15 +63,20 @@ function renderForecast(forecastList) {
   });
 }
 
-async function fetchWeather(city) {
+async function fetchWeather(location) {
   try {
-    const api = `https://weather-proxy.pavanganeshbutha.workers.dev/?city=${city}`;
+    const query =
+      typeof location === "string"
+        ? `city=${location}`
+        : `lat=${location.lat}&lon=${location.lon}`;
+
+    const api = `https://weather-proxy.pavanganeshbutha.workers.dev/?${query}`;
     const response = await fetch(api);
     if (!response.ok) {
       throw new Error("City not found");
     }
     const data = await response.json();
-    localStorage.setItem("lastSearchedCity", city);
+    localStorage.setItem("lastSearchedCity", data.current.name);
     renderCurrentWeather(data.current);
     const dailyForecast = filterForecastData(data.forecast.list);
     renderForecast(dailyForecast);
@@ -94,6 +99,17 @@ function initApp() {
   const lastSearchedCity = localStorage.getItem("lastSearchedCity");
   if (lastSearchedCity) {
     fetchWeather(lastSearchedCity);
+  } else {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        fetchWeather({ lat: latitude, lon: longitude });
+      },
+      (error) => {
+        console.warn("Geolocation blocked/failed. Falling back to default.");
+        fetchWeather("London");
+      },
+    );
   }
 }
 
